@@ -25,6 +25,14 @@ const speed = 200
 const gap_height = 3.0 * moa_height
 const margin = moa_width * 0.1
 
+
+const gameOverRect = {
+    x: 30,
+    y: canvas.height / 2 + (118 / 2) - 30,
+    width: canvas.width - 60,
+    height: 40,
+  };
+
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
@@ -39,6 +47,7 @@ document.addEventListener('keydown', event => {
 document.addEventListener('touchstart', event => {
     v = jump
 })
+
 
 function clear (ctx) {
 }
@@ -134,11 +143,25 @@ function game_over () {
     ctx.fillText("poäng: " + score.toString(), canvas.width / 2, canvas.height / 2)
     ctx.strokeText("poäng: " + score.toString(), canvas.width / 2, canvas.height / 2)
 
-    ctx.fillRect(30, canvas.height / 2 + (118 / 2) - 30, canvas.width - 60, 40)
+    ctx.fillRect(gameOverRect.x, gameOverRect.y, gameOverRect.width, gameOverRect.height)
     ctx.fillStyle = "black"
     ctx.font = "30px tahoma"
     ctx.fillText("försök igen", canvas.width / 2, canvas.height / 2 + (118 / 2))
-
+    canvas.addEventListener('click', function (event) {
+        let mousePos = getMousePos(canvas, event)   
+    
+        if(isInside(mousePos, gameOverRect)) {
+            location.reload()
+        } 
+    
+    })
+    document.addEventListener('touchstart', event => {
+        let touchPos = getMousePos(canvas, event)
+        if (isInside(touchPos, gameOverRect)) {
+            location.reload()
+        }
+    })
+    
 
 }
 
@@ -168,3 +191,15 @@ function main () {
     }
 
 }
+
+function getMousePos(canvas, event) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
+  }
+
+  function isInside(pos, rect) {
+    return pos.x > rect.x && pos.x < rect.x + rect.width && pos.y < rect.y + rect.height && pos.y > rect.y
+  }
