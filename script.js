@@ -155,8 +155,8 @@ function game_over () {
         } 
     
     })
-    document.addEventListener('touchstart', event => {
-        let touchPos = getMousePos(canvas, event)
+    canvas.addEventListener('touchstart', event => {
+        let touchPos = getTouchPos(canvas, event)
         if (isInside(touchPos, gameOverRect)) {
             location.reload()
         }
@@ -193,12 +193,21 @@ function main () {
 }
 
 function getMousePos(canvas, event) {
-    var rect = canvas.getBoundingClientRect();
+    let rect = canvas.getBoundingClientRect();
     return {
       x: event.clientX - rect.left,
       y: event.clientY - rect.top,
     };
   }
+
+function getTouchPos(canvas, event) {
+    let rect = canvas.getBoundingClientRect();
+    return {
+        x: event.touches[0].clientX - rect.left,
+        y: event.touches[0].clientY - rect.top,
+        };
+    }
+
 
   function isInside(pos, rect) {
     return pos.x > rect.x && pos.x < rect.x + rect.width && pos.y < rect.y + rect.height && pos.y > rect.y
