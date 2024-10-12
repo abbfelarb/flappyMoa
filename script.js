@@ -16,7 +16,7 @@ var dobby = new Image()
 dobby.src = "dobby.png"
 var playing = false
 
-let score = 0
+let score = -3
 
 const g = 1500
 const dt = 0.03
@@ -28,6 +28,7 @@ const speed = 200
 const gap_height = 3.0 * moa_height
 const margin = moa_width * 0.1
 
+var audio = new Audio("audio.mp3")
 
 const gameOverRect = {
     x: 30,
@@ -54,7 +55,7 @@ document.addEventListener('touchstart', event => {
 function start_game () {
     document.getElementById("game_container").style.display = "block"
     playing = true
-    score = 0
+    score = -3
     pipes = []
     v = 0
     pos = [((canvas.width / 3) - (moa_width / 2)), ((canvas.height / 2) - (moa_height / 2))]
@@ -119,8 +120,18 @@ function update_pipes () {
     }
 }
 
+function point_counter () {
+    if (playing) {
+        score += 1
+    }
+    setTimeout(point_counter, pipe_time)
+}
+
 function game_over () {
     playing = false
+    if (score < 0) {
+        score = 0
+    }
 
 
     start_screen.style.display = "none"
@@ -131,26 +142,14 @@ function game_over () {
     let height = canvas.height / 3
     let width = height * 2
 
-
-    // ctx.fillStyle = "pink"
-    // ctx.font = "bold 70px tahoma"
-    // ctx.textAlign = "center"
-
-    // ctx.fillText("DU DOG :(", canvas.width / 2, canvas.height / 2 - 48)
-    // ctx.strokeText("DU DOG :(", canvas.width / 2, canvas.height / 2 - 48)
-
-    // ctx.font = "48px tahoma"
-    // ctx.fillText("poäng: " + score.toString(), canvas.width / 2, canvas.height / 2)
-    // ctx.strokeText("poäng: " + score.toString(), canvas.width / 2, canvas.height / 2)
-
-    // ctx.fillRect(30, canvas.height / 2 + (118 / 2) - 30, canvas.width - 60, 40)
-    // ctx.fillStyle = "black"
-    // ctx.font = "30px tahoma"
-    // ctx.fillText("försök igen", canvas.width / 2, canvas.height / 2 + (118 / 2))
-
 }
 
+window.addEventListener("click", () => {
+    audio.play()
+})
+
 spawn_pipe()
+point_counter()
 setInterval(main, 33)
 
 function main () {
@@ -172,10 +171,21 @@ function main () {
         // update pipes
         update_pipes()
 
+        // update score
+        text_score = score.toString()
+        if (score < 0) {
+            text_score = "0"
+        }
+        ctx.font = "30px Arial"
+        ctx.fillText(text_score, 10, 30,)
+
+
     } else {
 
         game_over()
     }
+
+
 
 }
 
