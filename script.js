@@ -26,7 +26,7 @@ const speed = 200
 const gap_height = 3.0 * moa_height
 const margin = moa_width * 0.1
 
-let score = Math.ceil((screen.width * 2 / 3) / (speed * pipe_time)) * -1
+let score = Math.ceil((canvas.width * 2 / 3) / (speed * pipe_time / 1000)) * -1
 
 var audio = new Audio("audio.mp3")
 
@@ -55,7 +55,7 @@ document.addEventListener('touchstart', event => {
 function start_game () {
     document.getElementById("game_container").style.display = "block"
     playing = true
-    score = Math.ceil((screen.width * 2 / 3) / (speed * pipe_time / 1000)) * -1
+    score = Math.ceil((canvas.width * 2 / 3) / (speed * pipe_time / 1000)) * -1
     pipes = []
     v = 0
     pos = [((canvas.width / 3) - (moa_width / 2)), ((canvas.height / 2) - (moa_height / 2))]
@@ -100,6 +100,9 @@ function spawn_pipe () {
         let height = (1 - (Math.random() / 2)) * canvas.height
         pipes.push([canvas.width, height])
     }
+    // setTimeout(() => {
+    //     score += 1
+    // }, can)
     setTimeout(spawn_pipe, pipe_time)
 }
 
