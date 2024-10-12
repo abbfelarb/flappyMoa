@@ -16,8 +16,6 @@ var dobby = new Image()
 dobby.src = "dobby.png"
 var playing = false
 
-let score = -3
-
 const g = 1500
 const dt = 0.03
 const jump = 400
@@ -27,6 +25,8 @@ const pipe_height = 795
 const speed = 200
 const gap_height = 3.0 * moa_height
 const margin = moa_width * 0.1
+
+let score = Math.ceil((screen.width * 2 / 3) / (speed * pipe_time)) * -1
 
 var audio = new Audio("audio.mp3")
 
@@ -55,7 +55,7 @@ document.addEventListener('touchstart', event => {
 function start_game () {
     document.getElementById("game_container").style.display = "block"
     playing = true
-    score = -3
+    score = Math.ceil((screen.width * 2 / 3) / (speed * pipe_time / 1000)) * -1
     pipes = []
     v = 0
     pos = [((canvas.width / 3) - (moa_width / 2)), ((canvas.height / 2) - (moa_height / 2))]
@@ -80,7 +80,7 @@ function check_collision (p) {
     // aabb bool
     let collision = false
     for (n = 0; n < pipes.length; n++) {
-        if ((pos[0] + moa_width - margin > pipes[n][0] && pos[0] + moa_width + margin < pipes[n][0] + pipe_width) || (pos[0] - margin > pipes[n][0] && pos[0] + margin < pipes[n][0] + pipe_width)) {
+        if ((pos[0] + moa_width > pipes[n][0] && pos[0] + moa_width < pipes[n][0] + pipe_width) || (pos[0] > pipes[n][0] && pos[0] < pipes[n][0] + pipe_width)) {
             if (pos[1] + moa_height - margin > pipes[n][1] || pos[1] + margin < pipes[n][1] - gap_height) {
                 collision = true
                 break
