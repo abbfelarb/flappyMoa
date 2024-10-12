@@ -2,6 +2,8 @@ const canvas = document.getElementById('flappymoa')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 const ctx = canvas.getContext('2d')
+const start_screen = document.getElementById("START")
+const game_over_screen = document.getElementById("GAMEOVER")
 
 let moa_width = canvas.height * 0.15
 let moa_height = moa_width * 1
@@ -12,6 +14,7 @@ var moa = new Image()
 moa.src = "moa.png"
 var dobby = new Image()
 dobby.src = "dobby.png"
+var playing = false
 
 let score = 0
 
@@ -39,6 +42,18 @@ document.addEventListener('keydown', event => {
 document.addEventListener('touchstart', event => {
     v = jump
 })
+
+function start_game () {
+    document.getElementById("game_container").style.display = "block"
+    playing = true
+    score = 0
+    pipes = []
+    v = 0
+    pos = [((canvas.width / 3) - (moa_width / 2)), ((canvas.height / 2) - (moa_height / 2))]
+    start_screen.style.display = "none"
+    game_over_screen.style.display = "none"
+    canvas.style.display = "block"
+}
 
 function clear (ctx) {
 }
@@ -72,8 +87,10 @@ function check_collision (p) {
 }
 
 function spawn_pipe () {
-    let height = (1 - (Math.random() / 2)) * canvas.height
-    pipes.push([canvas.width, height])
+    if (playing) {
+        let height = (1 - (Math.random() / 2)) * canvas.height
+        pipes.push([canvas.width, height])
+    }
     setTimeout(spawn_pipe, pipe_time)
 }
 
@@ -94,51 +111,34 @@ function update_pipes () {
     }
 }
 
-
-function game () {
-    while (true) {
-        // clear screen
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-        // check collision
-        if (!check_collision(update_pos(pos))) {
-            // update moa
-            pos = update_pos(pos)
-            update_moa(pos)
-
-            v -= g * dt
-            pos[1] -= dt * v
-
-            // update pipes
-            update_pipes()
-
-        } else {
-            break
-        }
-    }
-}
-
 function game_over () {
+    playing = false
+
+
+    start_screen.style.display = "none"
+    canvas.style.display = "block"
+    game_over_screen.style.display = "block"
+    document.getElementById("score_text").innerHTML = "POÄNG: " + score.toString()
 
     let height = canvas.height / 3
     let width = height * 2
 
-    ctx.fillStyle = "pink"
-    ctx.font = "bold 70px tahoma"
-    ctx.textAlign = "center"
 
-    ctx.fillText("DU DOG :(", canvas.width / 2, canvas.height / 2 - 48)
-    ctx.strokeText("DU DOG :(", canvas.width / 2, canvas.height / 2 - 48)
+    // ctx.fillStyle = "pink"
+    // ctx.font = "bold 70px tahoma"
+    // ctx.textAlign = "center"
 
-    ctx.font = "48px tahoma"
-    ctx.fillText("poäng: " + score.toString(), canvas.width / 2, canvas.height / 2)
-    ctx.strokeText("poäng: " + score.toString(), canvas.width / 2, canvas.height / 2)
+    // ctx.fillText("DU DOG :(", canvas.width / 2, canvas.height / 2 - 48)
+    // ctx.strokeText("DU DOG :(", canvas.width / 2, canvas.height / 2 - 48)
 
-    ctx.fillRect(30, canvas.height / 2 + (118 / 2) - 30, canvas.width - 60, 40)
-    ctx.fillStyle = "black"
-    ctx.font = "30px tahoma"
-    ctx.fillText("försök igen", canvas.width / 2, canvas.height / 2 + (118 / 2))
+    // ctx.font = "48px tahoma"
+    // ctx.fillText("poäng: " + score.toString(), canvas.width / 2, canvas.height / 2)
+    // ctx.strokeText("poäng: " + score.toString(), canvas.width / 2, canvas.height / 2)
 
+    // ctx.fillRect(30, canvas.height / 2 + (118 / 2) - 30, canvas.width - 60, 40)
+    // ctx.fillStyle = "black"
+    // ctx.font = "30px tahoma"
+    // ctx.fillText("försök igen", canvas.width / 2, canvas.height / 2 + (118 / 2))
 
 }
 
@@ -146,7 +146,9 @@ spawn_pipe()
 setInterval(main, 33)
 
 function main () {
-
+    if (!playing) {
+        return
+    }
     // check collision
     if (!check_collision(update_pos(pos))) {
 

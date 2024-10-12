@@ -4,10 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>flappymoa</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="flappymoa"></canvas>
+    <div id="game_container" style="position: relative; display: none;" class="w-full h-full">
+    <div id="GAMEOVER" style="display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); "class="z-10 text-rose-400">
+        <div class="flex flex-col justify-center items-center">
+            <p class="text-6xl">
+                Du Dog :(! 
+            </p>
+            <p id ="score_text" class="text-3xl"></p>
+            <button onclick="start_game()" class="text-3xl">FÖRSÖK IGEN</button>
+        </div>
+    </div>
+    <canvas id="flappymoa" style="display: none; position: absolute;" class="z-0"></canvas>
+    </div>
+    
+    
+    <div id ="START" style="display: block;"class="w-full h-full text-rose-400">
+        <div class="flex flex-col w-full h-full justify-center items-center">
+            <p class="text-6xl">
+                Flappy Moa
+            </p>
+            <button onclick="start_game()" class="text-3xl">SPELA</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     
     

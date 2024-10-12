@@ -20,3 +20,18 @@ canvas {
     background-repeat: no-repeat;
     background-position: center center;
 }
+
+p,
+button {
+    text-shadow: -1px 1px 0 #000,
+        1px 1px 0 #000,
+        1px -1px 0 #000,
+        -1px -1px 0 #000;
+}
+
+#START {
+    background-image: url(./background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
